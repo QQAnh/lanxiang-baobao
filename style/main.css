@@ -241,3 +241,91 @@ body {
   .wish h5 { font-size: 1.2rem; }
   .nine p { font-size: 1.2rem; }
 }
+
+
+/* Container cho ảnh ngẫu nhiên */
+#random-images-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 2; /* Nằm trên pháo giấy (z-index: 1) nhưng dưới lớp chữ cuối (z-index: 3) */
+}
+
+/* Định dạng cho từng ảnh */
+.random-pic {
+  position: absolute;
+  max-width: 200px;
+  border-radius: 8px;
+  border: 4px solid white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+  /* ================================================= */
+  /* SỬA LỖI: Luôn ẩn ảnh theo mặc định bằng CSS */
+  visibility: hidden;
+  opacity: 0;
+  scale: 0.3; /* Đồng bộ trạng thái ban đầu với animation */
+  /* ================================================= */
+}
+
+/* Đảm bảo lớp chữ cuối cùng luôn nằm trên cùng */
+.nine {
+  /* Kích thước và căn giữa */
+  max-width: 950px; /* Chiều rộng tối đa của card */
+  margin: 0 auto;   /* Tự động căn giữa theo chiều ngang */
+
+  /* Hiệu ứng thẻ (card) */
+  background-color: rgba(255, 255, 255, 0.25); /* Giảm độ đục, tăng độ trong suốt */
+  padding: 30px;      /* Tạo khoảng trống bên trong card */
+  border-radius: 15px; /* Bo tròn các góc */
+  box-shadow: 0 10px 30px rgba(89, 69, 69, 0.2); /* Đổ bóng nhẹ cho card */
+
+  -webkit-backdrop-filter: blur(2px); /* Giảm độ mờ xuống một nửa */
+  backdrop-filter: blur(2px);
+
+  /* Viền nhẹ để tăng hiệu ứng kính */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* Đảm bảo card luôn nằm trên cùng (quan trọng) */
+  position: relative;
+  z-index: 3;
+  visibility: hidden;
+  opacity: 0;
+
+}
+
+.nine p {
+  font-size: 1.8rem; /* Có thể điều chỉnh lại một chút cho vừa card */
+  font-weight: 500;
+  color: var(--text-color); /* Đảm bảo màu chữ rõ nét */
+  text-shadow: none; /* Bỏ đổ bóng của chữ vì card đã có nền riêng */
+}
+
+/* Chỉnh lại nút Replay cho đẹp hơn trong card */
+#replay {
+  cursor: pointer;
+  z-index: 3;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  color: var(--highlight-color); /* Đổi màu cho nổi bật */
+  transition: transform 0.2s ease;
+}
+
+#replay:hover {
+  transform: scale(1.05); /* Thêm hiệu ứng khi di chuột vào */
+}
+
+/* Reponsive cho thiết bị di động */
+@media screen and (max-width: 768px) {
+  .nine {
+    max-width: 90%; /* Chiếm 90% chiều rộng màn hình */
+    padding: 20px;
+  }
+
+  .nine p {
+    font-size: 1.5rem;
+  }
+}

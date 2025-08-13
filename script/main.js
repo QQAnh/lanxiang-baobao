@@ -1,3 +1,6 @@
+// Biến toàn cục để lưu các animation, giúp kiểm soát (dừng) chúng khi cần
+let imageAnimations = [];
+
 // Kích hoạt hộp thoại hỏi người dùng có muốn phát nhạc không
 window.addEventListener('load', () => {
     Swal.fire({
@@ -22,211 +25,107 @@ const animationTimeline = () => {
     // Tách các ký tự cần hiệu ứng riêng lẻ
     const textBoxChars = document.querySelector(".hbd-chatbox");
     const hbd = document.querySelector(".wish-hbd");
+    textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML.split("").join("</span><span>")}</span>`;
+    hbd.innerHTML = `<span>${hbd.innerHTML.split("").join("</span><span>")}</span>`;
 
-    textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
-        .split("")
-        .join("</span><span>")}</span>`;
-
-    hbd.innerHTML = `<span>${hbd.innerHTML
-        .split("")
-        .join("</span><span>")}</span>`;
-
-    const ideaTextTrans = {
-        opacity: 0,
-        y: -20,
-        rotationX: 5,
-        skewX: "15deg"
-    };
-
-    const ideaTextTransLeave = {
-        opacity: 0,
-        y: 20,
-        rotationY: 5,
-        skewX: "-15deg"
-    };
-
-    // Khởi tạo timeline với cú pháp GSAP 3
+    const ideaTextTrans = { autoAlpha: 0, y: -20, rotationX: 5, skewX: "15deg" };
+    const ideaTextTransLeave = { autoAlpha: 0, y: 20, rotationY: 5, skewX: "-15deg" };
     const tl = gsap.timeline();
 
-    tl.to(".container", {
-        visibility: "visible",
-        duration: 0.6,
-        ease: "power2.out"
-    })
-        .from(".one", {
-            opacity: 0,
-            y: 10,
-            duration: 0.7,
-            ease: "power2.out"
-        })
-        .from(".two", {
-            opacity: 0,
-            y: 10,
-            duration: 0.4,
-            ease: "power1.out"
-        }, "-=0.2")
-        .to([".one", ".two"], {
-            opacity: 0,
-            y: 10,
-            duration: 0.7,
-            ease: "power1.in"
-        }, "+=2.5")
-        .from(".three", {
-            opacity: 0,
-            y: 10,
-            duration: 0.7,
-            ease: "power2.out"
-        })
-        .to(".three", {
-            opacity: 0,
-            y: 10,
-            duration: 0.7,
-            ease: "power1.in"
-        }, "+=2.5")
-        .from(".four", {
-            scale: 0.2,
-            opacity: 0,
-            duration: 0.7,
-            ease: "back.out(1.7)"
-        })
-        .from(".fake-btn", {
-            scale: 0.2,
-            opacity: 0,
-            duration: 0.3,
-            ease: "power2.out"
-        }, "-=0.5")
-        .staggerTo(".hbd-chatbox span", 0.05, {
-            visibility: "visible",
-        }, 0.05)
-        .to(".fake-btn", {
-            backgroundColor: "var(--highlight-color)",
-            duration: 0.1
-        }, "+=2")
-        .to(".four", {
-            scale: 0.2,
-            opacity: 0,
-            y: -150,
-            duration: 0.5,
-            ease: "power1.in"
-        }, "+=1")
-        .from(".idea-1", { ...ideaTextTrans, duration: 0.7, ease: "power2.out" })
-        .to(".idea-1", { ...ideaTextTransLeave, duration: 0.7, ease: "power1.in" }, "+=2")
-        .from(".idea-2", { ...ideaTextTrans, duration: 0.7, ease: "power2.out" })
-        .to(".idea-2", { ...ideaTextTransLeave, duration: 0.7, ease: "power1.in" }, "+=2")
-        .from(".idea-3", { ...ideaTextTrans, duration: 0.7, ease: "power2.out" })
-        .to(".idea-3 strong", {
-            scale: 1.2,
-            x: 10,
-            backgroundColor: "var(--secondary-color)",
-            color: "#fff",
-            duration: 0.5,
-            ease: "power2.out"
-        })
-        .to(".idea-3", { ...ideaTextTransLeave, duration: 0.7, ease: "power1.in" }, "+=2")
-        .from(".idea-4", { ...ideaTextTrans, duration: 0.7, ease: "power2.out" })
-        .to(".idea-4", { ...ideaTextTransLeave, duration: 0.7, ease: "power1.in" }, "+=2")
-        .from(".idea-5", {
-            rotationX: 15,
-            rotationZ: -10,
-            skewY: "-5deg",
-            y: 50,
-            z: 10,
-            opacity: 0,
-            duration: 0.7,
-            ease: "power2.out"
-        }, "+=1")
-        .to(".idea-5 span", {
-            rotation: 90,
-            x: 8,
-            duration: 0.7,
-            ease: "power2.inOut"
-        }, "+=1")
-        .to(".idea-5", {
-            scale: 0.2,
-            opacity: 0,
-            duration: 0.7,
-            ease: "power1.in"
-        }, "+=2")
-        .staggerFrom(".idea-6 span", 0.8, {
-            scale: 3,
-            opacity: 0,
-            rotation: 15,
-            ease: "expo.easeOut"
-        }, 0.2)
-        .staggerTo(".idea-6 span", 0.8, {
-            scale: 3,
-            opacity: 0,
-            rotation: -15,
-            ease: "expo.easeOut"
-        }, 0.2, "+=1.5")
-        .staggerFromTo(".baloons img", 2.5, {
-            opacity: 0.9,
-            y: 1400
-        }, {
-            opacity: 1,
-            y: -1000,
-            ease: "power2.easeOut"
-        }, 0.2)
-        .from(".profile-picture", {
-            scale: 3.5,
-            opacity: 0,
-            x: 25,
-            y: -25,
-            rotationZ: -45,
-            duration: 0.5,
-            ease: "power2.out"
-        }, "-=2")
-        .from(".hat", {
-            x: -100,
-            y: 350,
-            rotation: -180,
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.out"
-        })
-        .staggerFrom(".wish-hbd span", 0.7, {
-            opacity: 0,
-            y: -50,
-            rotation: 150,
-            skewX: "30deg",
-            ease: "elastic.out(1, 0.5)"
-        }, 0.1)
-        .staggerTo(".wish-hbd span", 0.7, {
+    // HÀM HIỆU ỨNG ẢNH (Không thay đổi)
+    const animateRandomImages = () => {
+        imageAnimations.forEach(anim => anim.kill());
+        imageAnimations = [];
+        const images = gsap.utils.toArray('.random-pic');
+        const container = document.querySelector('#random-images-container');
+        const IMAGE_MAX_WIDTH = 200;
+        const PADDING = 20;
+        images.forEach((img, index) => {
+            function animateThisImage() {
+                const containerWidth = container.offsetWidth;
+                const containerHeight = container.offsetHeight;
+                const randomX = gsap.utils.random(PADDING, containerWidth - IMAGE_MAX_WIDTH - PADDING);
+                const randomY = gsap.utils.random(PADDING, containerHeight - IMAGE_MAX_WIDTH - PADDING);
+                const randomRot = gsap.utils.random(-30, 30);
+                gsap.set(img, { left: randomX, top: randomY, rotation: randomRot });
+                const tween = gsap.timeline()
+                    .to(img, { autoAlpha: 1, scale: 1, duration: 0.8, ease: 'power2.out' })
+                    .to(img, { autoAlpha: 0, scale: 0.3, duration: 0.8, ease: 'power2.in', delay: 4 });
+                const nextRunDelay = gsap.utils.random(5, 8);
+                const nextRun = gsap.delayedCall(nextRunDelay, animateThisImage);
+                imageAnimations.push(tween, nextRun);
+            }
+            const initialStaggerDelay = index * 2.0;
+            const initialRun = gsap.delayedCall(initialStaggerDelay, animateThisImage);
+            imageAnimations.push(initialRun);
+        });
+    };
+
+    // TIMELINE CHÍNH
+    tl.to(".container", { visibility: "visible" })
+        .from(".one", { autoAlpha: 0, y: 10, duration: 0.7 })
+        .from(".two", { autoAlpha: 0, y: 10, duration: 0.4 }, "-=0.2")
+        .to([".one", ".two"], { autoAlpha: 0, y: 10, duration: 0.7 }, "+=2.5")
+        .from(".three", { autoAlpha: 0, y: 10, duration: 0.7 })
+        .to(".three", { autoAlpha: 0, y: 10, duration: 0.7 }, "+=2.5")
+        .from(".four", { autoAlpha: 0, scale: 0.2, duration: 0.7, ease: "back.out(1.7)" })
+        .from(".fake-btn", { autoAlpha: 0, scale: 0.2, duration: 0.3 }, "-=0.5")
+        .staggerTo(".hbd-chatbox span", 0.05, { visibility: "visible" }, 0.05)
+        .to(".fake-btn", { backgroundColor: "var(--highlight-color)" }, "+=2")
+        .to(".four", { autoAlpha: 0, scale: 0.2, y: -150, duration: 0.5 }, "+=1")
+        .from(".idea-1", { ...ideaTextTrans, duration: 0.7 })
+        .to(".idea-1", { ...ideaTextTransLeave, duration: 0.7 }, "+=2")
+        .from(".idea-2", { ...ideaTextTrans, duration: 0.7 })
+        .to(".idea-2", { ...ideaTextTransLeave, duration: 0.7 }, "+=2")
+        .from(".idea-3", { ...ideaTextTrans, duration: 0.7 })
+        .to(".idea-3 strong", { scale: 1.2, x: 10, backgroundColor: "var(--secondary-color)", color: "#fff" })
+        .to(".idea-3", { ...ideaTextTransLeave, duration: 0.7 }, "+=2")
+        .from(".idea-4", { ...ideaTextTrans, duration: 0.7 })
+        .to(".idea-4", { ...ideaTextTransLeave, duration: 0.7 }, "+=2")
+        .from(".idea-5", { autoAlpha: 0, rotationX: 15, rotationZ: -10, y: 50, z: 10, duration: 0.7 }, "+=1")
+        .to(".idea-5 span", { rotation: 90, x: 8, duration: 0.7 }, "+=1")
+        .to(".idea-5", { autoAlpha: 0, scale: 0.2, duration: 0.7 }, "+=2")
+        .staggerFrom(".idea-6 span", 0.8, { autoAlpha: 0, scale: 3, rotation: 15, ease: "expo.easeOut" }, 0.2)
+        .staggerTo(".idea-6 span", 0.8, { autoAlpha: 0, scale: 3, rotation: -15, ease: "expo.easeOut" }, 0.2, "+=1.5")
+        .staggerFromTo(".baloons img", 2.5, { opacity: 0.9, y: 1400 }, { opacity: 1, y: -1000, ease: "power2.easeOut" }, 0.2)
+        .from(".profile-picture", { autoAlpha: 0, scale: 3.5, x: 25, y: -25, rotationZ: -45, duration: 0.5 }, "-=2")
+        .from(".hat", { autoAlpha: 0, x: -100, y: 350, rotation: -180, duration: 0.5 })
+        .staggerFrom(".wish-hbd span", 0.7, { autoAlpha: 0, y: -50, rotation: 150, skewX: "30deg", ease: "elastic.out(1, 0.5)" }, 0.1)
+        .staggerTo(".wish-hbd span", 0.7, { scale: 1, color: "var(--highlight-color)", ease: "expo.out" }, 0.1, "party")
+        .from(".wish h5", { autoAlpha: 0, y: 10, skewX: "-15deg", duration: 0.5 }, "party")
+        .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: -1, repeatDelay: 1.4 }, 0.3)
+        .to(".six", { autoAlpha: 0, y: 30, duration: 0.7, ease: "power1.in" }, "+=2.5")
+        .call(animateRandomImages)
+
+        // ===================================================================
+        // SỬA LỖI HIỂN THỊ CARD: ANIMATE CẢ CHIẾC CARD
+        // ===================================================================
+        // 1. Làm cho cả chiếc card (.nine) hiện ra trước
+        .to(".nine", {
+            autoAlpha: 1, // Dùng autoAlpha để chuyển từ visibility: hidden sang visible
             scale: 1,
-            color: "var(--highlight-color)",
-            ease: "expo.out"
-        }, 0.1, "party")
-        .from(".wish h5", {
-            opacity: 0,
-            y: 10,
-            skewX: "-15deg",
-            duration: 0.5,
+            duration: 0.7,
             ease: "power2.out"
-        }, "party")
-        .staggerTo(".eight svg", 1.5, {
-            visibility: "visible",
-            opacity: 0,
-            scale: 80,
-            repeat: -1, // Lặp vô hạn
-            repeatDelay: 1.4
-        }, 0.3)
-        .to(".six", {
-            opacity: 0,
-            y: 30,
-            zIndex: "-1",
-            duration: 0.5,
-            ease: "power1.in"
-        }, "+=2.5")
-        .staggerFrom(".nine p", 1, { ...ideaTextTrans, ease: "power2.out" }, 1.2)
+        })
+        // 2. Sau khi card đã hiện, mới làm cho chữ bên trong nó hiện ra
+        .staggerFrom(".nine p", 1, { ...ideaTextTrans, ease: "power2.out" }, 0.8, "-=0.2")
+
         .to(".last-smile", {
             rotation: 90,
             duration: 0.5,
             ease: "power2.inOut"
         }, "+=1");
 
-    // Khởi động lại animation khi nhấn nút
+    // SỰ KIỆN CLICK CHO NÚT REPLAY
     const replyBtn = document.getElementById("replay");
     replyBtn.addEventListener("click", () => {
+        imageAnimations.forEach(anim => anim.kill());
+        imageAnimations = [];
+        gsap.set('.random-pic', { autoAlpha: 0 });
+
+        // Khi restart, cũng phải ẩn chiếc card đi
+        gsap.set('.nine', { autoAlpha: 0, scale: 1 }); // Reset trạng thái của card
+
         tl.restart();
     });
 };
