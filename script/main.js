@@ -1,6 +1,42 @@
 // Biến toàn cục để lưu các animation, giúp kiểm soát (dừng) chúng khi cần
 let imageAnimations = [];
 
+// ===================================================================
+// TÍNH NĂNG MỚI: VỆT SÁNG TINH TÚ THEO CHUỘT
+// ===================================================================
+window.addEventListener('mousemove', function(e) {
+    // Tạo một phần tử .star
+    let star = document.createElement('div');
+    star.className = 'star';
+    document.body.appendChild(star);
+
+    // Kích thước và vị trí ngẫu nhiên xung quanh con trỏ
+    const size = Math.random() * 5 + 1; // Kích thước từ 1px đến 6px
+    const x = e.pageX;
+    const y = e.pageY;
+
+    gsap.set(star, {
+        width: size,
+        height: size,
+        left: x,
+        top: y,
+    });
+
+    // Animate và tự hủy
+    gsap.to(star, {
+        duration: Math.random() * 1.5 + 0.5, // Tồn tại từ 0.5s đến 2s
+        opacity: 0,
+        scale: 0.1,
+        x: (Math.random() - 0.5) * 100, // Di chuyển ngẫu nhiên
+        y: (Math.random() - 0.5) * 100,
+        ease: 'power2.out',
+        onComplete: () => {
+            star.remove();
+        }
+    });
+});
+
+
 // Kích hoạt hộp thoại hỏi người dùng có muốn phát nhạc không
 window.addEventListener('load', () => {
     Swal.fire({
@@ -32,36 +68,69 @@ const animationTimeline = () => {
     const ideaTextTransLeave = { autoAlpha: 0, y: 20, rotationY: 5, skewX: "-15deg" };
     const tl = gsap.timeline();
 
-    // HÀM HIỆU ỨNG ẢNH (Không thay đổi)
+    // HÀM HIỆU ỨNG ẢNH VỚI TÍNH NĂNG TƯƠNG TÁC (Không tránh card)
     const animateRandomImages = () => {
         imageAnimations.forEach(anim => anim.kill());
         imageAnimations = [];
+
         const images = gsap.utils.toArray('.random-pic');
         const container = document.querySelector('#random-images-container');
+        const captionEl = document.querySelector('#image-caption');
         const IMAGE_MAX_WIDTH = 200;
         const PADDING = 20;
+
         images.forEach((img, index) => {
+            let imageTween;
+
             function animateThisImage() {
                 const containerWidth = container.offsetWidth;
                 const containerHeight = container.offsetHeight;
+
+                // Quay lại logic cũ: vị trí ngẫu nhiên trên toàn màn hình
                 const randomX = gsap.utils.random(PADDING, containerWidth - IMAGE_MAX_WIDTH - PADDING);
                 const randomY = gsap.utils.random(PADDING, containerHeight - IMAGE_MAX_WIDTH - PADDING);
-                const randomRot = gsap.utils.random(-30, 30);
-                gsap.set(img, { left: randomX, top: randomY, rotation: randomRot });
-                const tween = gsap.timeline()
+
+                gsap.set(img, {
+                    left: randomX,
+                    top: randomY,
+                    rotation: gsap.utils.random(-30, 30)
+                });
+
+                imageTween = gsap.timeline()
                     .to(img, { autoAlpha: 1, scale: 1, duration: 0.8, ease: 'power2.out' })
                     .to(img, { autoAlpha: 0, scale: 0.3, duration: 0.8, ease: 'power2.in', delay: 4 });
+
                 const nextRunDelay = gsap.utils.random(5, 8);
                 const nextRun = gsap.delayedCall(nextRunDelay, animateThisImage);
-                imageAnimations.push(tween, nextRun);
+
+                imageAnimations.push(imageTween, nextRun);
             }
+
             const initialStaggerDelay = index * 2.0;
             const initialRun = gsap.delayedCall(initialStaggerDelay, animateThisImage);
             imageAnimations.push(initialRun);
+
+            // Sự kiện tương tác
+            img.addEventListener('mouseenter', () => {
+                if (imageTween) imageTween.pause();
+                gsap.to(img, { scale: 1.15, duration: 0.3, zIndex: 10 });
+                captionEl.textContent = img.dataset.caption || "";
+                gsap.to(captionEl, { autoAlpha: 1, duration: 0.2 });
+            });
+
+            img.addEventListener('mouseleave', () => {
+                gsap.to(img, { scale: 1, duration: 0.3, zIndex: 1 });
+                gsap.to(captionEl, { autoAlpha: 0, duration: 0.2 });
+                if (imageTween) imageTween.resume();
+            });
+
+            img.addEventListener('mousemove', (e) => {
+                gsap.set(captionEl, { x: e.clientX + 15, y: e.clientY + 15 });
+            });
         });
     };
 
-    // TIMELINE CHÍNH
+    // TIMELINE CHÍNH (Không thay đổi)
     tl.to(".container", { visibility: "visible" })
         .from(".one", { autoAlpha: 0, y: 10, duration: 0.7 })
         .from(".two", { autoAlpha: 0, y: 10, duration: 0.4 }, "-=0.2")
@@ -96,25 +165,9 @@ const animationTimeline = () => {
         .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: -1, repeatDelay: 1.4 }, 0.3)
         .to(".six", { autoAlpha: 0, y: 30, duration: 0.7, ease: "power1.in" }, "+=2.5")
         .call(animateRandomImages)
-
-        // ===================================================================
-        // SỬA LỖI HIỂN THỊ CARD: ANIMATE CẢ CHIẾC CARD
-        // ===================================================================
-        // 1. Làm cho cả chiếc card (.nine) hiện ra trước
-        .to(".nine", {
-            autoAlpha: 1, // Dùng autoAlpha để chuyển từ visibility: hidden sang visible
-            scale: 1,
-            duration: 0.7,
-            ease: "power2.out"
-        })
-        // 2. Sau khi card đã hiện, mới làm cho chữ bên trong nó hiện ra
+        .to(".nine", { autoAlpha: 1, scale: 1, duration: 0.7, ease: "power2.out" })
         .staggerFrom(".nine p", 1, { ...ideaTextTrans, ease: "power2.out" }, 0.8, "-=0.2")
-
-        .to(".last-smile", {
-            rotation: 90,
-            duration: 0.5,
-            ease: "power2.inOut"
-        }, "+=1");
+        .to(".last-smile", { rotation: 90, duration: 0.5, ease: "power2.inOut" }, "+=1");
 
     // SỰ KIỆN CLICK CHO NÚT REPLAY
     const replyBtn = document.getElementById("replay");
@@ -122,10 +175,7 @@ const animationTimeline = () => {
         imageAnimations.forEach(anim => anim.kill());
         imageAnimations = [];
         gsap.set('.random-pic', { autoAlpha: 0 });
-
-        // Khi restart, cũng phải ẩn chiếc card đi
-        gsap.set('.nine', { autoAlpha: 0, scale: 1 }); // Reset trạng thái của card
-
+        gsap.set('.nine', { autoAlpha: 0, scale: 1 });
         tl.restart();
     });
 };

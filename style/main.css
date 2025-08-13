@@ -8,17 +8,25 @@
   --highlight-color: #FF69B4; /* Màu hồng đậm nổi bật */
 }
 
+/* Trong file main.css */
 html {
   box-sizing: border-box;
-  background-color: var(--bg-color); /* <-- THÊM DÒNG NÀY */
-
 }
 
 body {
   font-family: 'Quicksand', sans-serif;
   margin: 0;
+  /* NỀN TRỜI CHUYỂN SẮC */
+  background: linear-gradient(-45deg, #FFC0CB, #81D4FA, #FFDDC1, #FF69B4);
+  background-size: 400% 400%;
+  animation: gradient 20s ease infinite;
 }
 
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 .song {
   visibility: hidden;
 }
@@ -328,4 +336,12 @@ body {
   .nine p {
     font-size: 1.5rem;
   }
+}
+
+.star {
+  position: fixed; /* Luôn nằm trên màn hình */
+  background-color: white;
+  border-radius: 50%;
+  pointer-events: none; /* Không cản trở việc click/hover */
+  z-index: 998; /* Nằm trên nền nhưng dưới ảnh và các nội dung khác */
 }
