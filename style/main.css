@@ -1,9 +1,21 @@
+/* Thiết lập bảng màu và font chữ toàn cục */
+:root {
+  --bg-color: #FFF5E4; /* Màu nền kem nhẹ */
+  --text-color: #594545; /* Màu chữ nâu đậm */
+  --primary-color: #FFC0CB; /* Màu hồng pastel */
+  --secondary-color: #81D4FA; /* Màu xanh da trời nhạt */
+  --accent-color: #FFDDC1; /* Màu đào nhạt */
+  --highlight-color: #FF69B4; /* Màu hồng đậm nổi bật */
+}
+
 html {
   box-sizing: border-box;
+  background-color: var(--bg-color); /* <-- THÊM DÒNG NÀY */
+
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Quicksand', sans-serif;
   margin: 0;
 }
 
@@ -19,6 +31,7 @@ body {
   text-align: center;
   visibility: hidden;
   width: 100vw;
+  color: var(--text-color);
 }
 
 .container > div {
@@ -29,30 +42,37 @@ body {
 }
 
 .one {
-  font-size: 4.5rem;
+  font-size: 4rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
 .two {
-  font-size: 1.2rem;
-  font-weight: lighter;
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
 .three {
-  font-size: 3rem;
+  font-size: 2.8rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
 .four .text-box {
-  border: 3px solid #aaa;
-  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   margin: 0 auto;
-  padding: 10px;
+  padding: 15px;
   position: relative;
-  width: 600px;
+  width: 650px;
 }
 
 .text-box p {
   margin: 0;
   text-align: left;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .text-box span {
@@ -60,26 +80,29 @@ body {
 }
 
 .text-box .fake-btn {
-  background-color: rgb(21, 161, 237);
-  border-radius: 3px;
-  bottom: -50px;
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  bottom: -55px;
   color: #fff;
-  padding: .5rem 1rem;
+  font-weight: 600;
+  padding: .7rem 1.2rem;
   position: absolute;
-  right: 5px;
+  right: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .five p {
-  font-size: 2rem;
+  font-size: 2.2rem;
   left: 0;
   position: absolute;
   right: 0;
 }
 
 .idea-3 strong {
-  border-radius: 3px;
+  border-radius: 5px;
   display: inline-block;
-  padding: 3px 5px;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
 }
 
 .five .idea-5 {
@@ -90,10 +113,11 @@ body {
   display: inline-block;
 }
 
-.idea-6 span{
+.idea-6 span {
   font-size: 15rem;
+  font-weight: 700;
+  text-shadow: 5px 5px 10px rgba(0,0,0,0.2);
 }
-
 
 .six {
   position: relative;
@@ -105,14 +129,19 @@ body {
   display: inline-block;
   height: 350px;
   max-width: 100%;
-  /* height: auto; */
+  border-radius: 50%;
+  border: 5px solid white;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
 .six .hat {
-  left: 41.5%;
+  height: 80px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
   position: absolute;
-  /* transform: scale(0.1); */
-  top: -35%;
+  top: -65px;
   width: 80px;
 }
 
@@ -146,147 +175,69 @@ body {
   top: 0;
   visibility: hidden;
   width: 25px;
-  z-index: -1;
+  /* Thêm dòng sau để tối ưu hóa animation */
+  will-change: transform, opacity;
 }
 
-.eight svg:nth-child(1) {
-  fill: #bd6ecf;
-  left: 5vw;
-  top: 7vh;
-}
-
-.eight svg:nth-child(2) {
-  fill: #7dd175;
-  left: 35vw;
-  top: 23vh;
-}
-
-.eight svg:nth-child(3) {
-  fill: #349d8b;
-  left: 23vw;
-  top: 33vh;
-}
-
-.eight svg:nth-child(4) {
-  fill: #347a9d;
-  left: 57vw;
-  top: 43vh;
-}
-
-.eight svg:nth-child(5) {
-  fill: #c66053;
-  left: 7vw;
-  top: 68vh;
-}
-
-.eight svg:nth-child(6) {
-  fill: #bfaa40;
-  left: 77vw;
-  top: 42vh;
-}
-
-.eight svg:nth-child(7) {
-  fill: #e3bae8;
-  left: 83vw;
-  top: 68vh;
-}
-
-.eight svg:nth-child(8) {
-  fill: #8762cb;
-  left: 37vw;
-  top: 86vh;
-}
-
-.eight svg:nth-child(9) {
-  fill: #9a90da;
-  left: 87vw;
-  top: 94vh;
-}
+/* Bảng màu mới cho pháo giấy */
+.eight svg:nth-child(1) { fill: #fce4ec; left: 5vw; top: 7vh; }
+.eight svg:nth-child(2) { fill: #f8bbd0; left: 35vw; top: 23vh; }
+.eight svg:nth-child(3) { fill: #e1bee7; left: 23vw; top: 33vh; }
+.eight svg:nth-child(4) { fill: #d1c4e9; left: 57vw; top: 43vh; }
+.eight svg:nth-child(5) { fill: #c5cae9; left: 7vw; top: 68vh; }
+.eight svg:nth-child(6) { fill: #b3e5fc; left: 77vw; top: 42vh; }
+.eight svg:nth-child(7) { fill: #b2ebf2; left: 83vw; top: 68vh; }
+.eight svg:nth-child(8) { fill: #dcedc8; left: 37vw; top: 86vh; }
+.eight svg:nth-child(9) { fill: #f0f4c3; left: 87vw; top: 94vh; }
 
 .wish-hbd {
   font-size: 3em;
   margin: 0;
   text-transform: uppercase;
+  font-weight: 700;
+  text-shadow: 3px 3px 5px rgba(0,0,0,0.15);
 }
 
 .wish h5 {
   font-size: 2rem;
-  font-weight: lighter;
+  font-weight: 500;
   margin: 10px 0 0;
 }
 
 .nine p {
   font-size: 2rem;
-  font-weight: lighter;
+  font-weight: 500;
 }
 
 #replay {
   cursor: pointer;
   z-index: 3;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
 
 /* Media Queries */
-@media screen and (max-height: 1000px) {
-  .six .hat {
-    left: 40%;
-  }
-}
-
-@media screen and (max-height: 800px) {
-  .six .hat {
-    left: 37%;
-  }
-}
-
-@media screen and (max-height: 700px) {
-  .six .hat {
-    left: 32%;
-  }
-}
-
-@media screen and (max-height: 850px) and (max-width: 450px) {
-  .six .hat {
-    left: 32%;
-  }
+@media screen and (max-width: 768px) {
+  .one { font-size: 3rem; }
+  .three { font-size: 2.2rem; }
+  .four .text-box { width: 90%; }
+  .five p { font-size: 1.8rem; }
+  .idea-6 span { font-size: 10rem; }
+  .six img { height: 300px; }
+  .wish-hbd { font-size: 2em; }
+  .wish h5 { font-size: 1.5rem; }
+  .nine p { font-size: 1.5rem; }
 }
 
 @media screen and (max-width: 500px) {
-  .container {
-    width: 90%;
-  }
-
-  .four .text-box {
-    width: 90%;
-  }
-
-  .text-box .fake-btn {
-    bottom: -38px;
-    right: 5px;
-  }
-
-  .idea-5 span {
-    display: block;
-  }
-
-  .idea-6 span {
-    font-size: 10rem;
-  }
-
-  .six .hat {
-    /* top: -20px; */
-    width: 50px;
-  }
-
-  .wish-hbd {
-    font-size: 2.2em;
-  }
-
-  .wish h5 {
-    font-size: 1.4rem;
-  }
-
-  .nine p {
-    font-size: 1.5rem;
-    font-weight: lighter;
-  }
+  .one { font-size: 2.5rem; }
+  .three { font-size: 1.8rem; }
+  .text-box .fake-btn { bottom: -45px; }
+  .idea-5 span { display: block; }
+  .six img { height: 250px; }
+  .six .hat { height: 60px; width: 60px; top: -45px; }
+  .wish-hbd { font-size: 1.5em; }
+  .wish h5 { font-size: 1.2rem; }
+  .nine p { font-size: 1.2rem; }
 }
