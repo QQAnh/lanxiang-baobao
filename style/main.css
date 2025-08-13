@@ -8,7 +8,7 @@
   --highlight-color: #FF69B4; /* Màu hồng đậm nổi bật */
 }
 
-/* Trong file main.css */
+/* Thiết lập cơ bản */
 html {
   box-sizing: border-box;
 }
@@ -27,19 +27,72 @@ body {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
 .song {
   visibility: hidden;
 }
 
+/* =================================================================== */
+/* MỚI: CSS cho Hộp quà mở đầu */
+/* CSS cho Hộp quà SVG */
+#gift-box-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+
+  /* THÊM 3 DÒNG SAU ĐỂ CĂN GIỮA HOÀN HẢO */
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+.gift-box {
+  text-align: center; /* Căn giữa SVG và text bên trong */
+}
+
+#gift-box-container .gift-box svg {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  /* Thêm hiệu ứng đổ bóng cho đẹp hơn */
+  filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+/* Thêm hiệu ứng khi di chuột vào */
+#gift-box-container .gift-box:hover svg {
+  transform: scale(1.05);
+}
+
+/* Hiệu ứng nảy nhẹ của nắp khi di chuột vào */
+#gift-box-container .gift-box:hover #lid-group {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+/* =================================================================== */
+
+/* THAY ĐỔI: container ban đầu sẽ bị ẩn hoàn toàn */
 .container {
   height: 100vh;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
   text-align: center;
-  visibility: hidden;
   width: 100vw;
   color: var(--text-color);
+  visibility: hidden; /* Sẽ được GSAP điều khiển */
+  opacity: 0; /* Thêm opacity để fade in mượt mà */
 }
 
 .container > div {
@@ -48,6 +101,8 @@ body {
   right: 0;
   top: 20vh;
 }
+
+/* --- TOÀN BỘ CSS GỐC ĐƯỢC KHÔI PHỤC TỪ ĐÂY --- */
 
 .one {
   font-size: 4rem;
@@ -170,33 +225,15 @@ body {
   left: 30%;
 }
 
-.seven, .eight {
+/* KHÔI PHỤC: CSS cho bóng bay */
+.seven {
   height: 100vh;
   position: fixed;
   top: 0;
   width: 100vw;
 }
 
-.eight svg {
-  left: 0;
-  position: absolute;
-  top: 0;
-  visibility: hidden;
-  width: 25px;
-  /* Thêm dòng sau để tối ưu hóa animation */
-  will-change: transform, opacity;
-}
-
-/* Bảng màu mới cho pháo giấy */
-.eight svg:nth-child(1) { fill: #fce4ec; left: 5vw; top: 7vh; }
-.eight svg:nth-child(2) { fill: #f8bbd0; left: 35vw; top: 23vh; }
-.eight svg:nth-child(3) { fill: #e1bee7; left: 23vw; top: 33vh; }
-.eight svg:nth-child(4) { fill: #d1c4e9; left: 57vw; top: 43vh; }
-.eight svg:nth-child(5) { fill: #c5cae9; left: 7vw; top: 68vh; }
-.eight svg:nth-child(6) { fill: #b3e5fc; left: 77vw; top: 42vh; }
-.eight svg:nth-child(7) { fill: #b2ebf2; left: 83vw; top: 68vh; }
-.eight svg:nth-child(8) { fill: #dcedc8; left: 37vw; top: 86vh; }
-.eight svg:nth-child(9) { fill: #f0f4c3; left: 87vw; top: 94vh; }
+/* BỎ: .eight svg không còn được sử dụng */
 
 .wish-hbd {
   font-size: 3em;
@@ -212,9 +249,50 @@ body {
   margin: 10px 0 0;
 }
 
+/* KHÔI PHỤC: CSS cho container ảnh rơi ngẫu nhiên và từng ảnh */
+#random-images-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.random-pic {
+  position: absolute;
+  max-width: 200px;
+  border-radius: 8px;
+  border: 4px solid white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  visibility: hidden;
+  opacity: 0;
+  scale: 0.3;
+}
+
+/* KHÔI PHỤC: CSS cho card cuối cùng */
+.nine {
+  max-width: 950px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.25);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(89, 69, 69, 0.2);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 3;
+  visibility: hidden;
+  opacity: 0;
+}
+
 .nine p {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 500;
+  color: var(--text-color);
+  text-shadow: none;
 }
 
 #replay {
@@ -223,9 +301,34 @@ body {
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 6px;
+  color: var(--highlight-color);
+  transition: transform 0.2s ease;
 }
 
-/* Media Queries */
+#replay:hover {
+  transform: scale(1.05);
+}
+
+/* MỚI: CSS cho canvas pháo giấy */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Quan trọng: để không cản trở click */
+  z-index: 999;
+}
+
+.star {
+  position: fixed;
+  background-color: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 998;
+}
+
+/* Media Queries (giữ nguyên từ bản gốc) */
 @media screen and (max-width: 768px) {
   .one { font-size: 3rem; }
   .three { font-size: 2.2rem; }
@@ -235,6 +338,7 @@ body {
   .six img { height: 300px; }
   .wish-hbd { font-size: 2em; }
   .wish h5 { font-size: 1.5rem; }
+  .nine { max-width: 90%; padding: 20px; }
   .nine p { font-size: 1.5rem; }
 }
 
@@ -248,100 +352,4 @@ body {
   .wish-hbd { font-size: 1.5em; }
   .wish h5 { font-size: 1.2rem; }
   .nine p { font-size: 1.2rem; }
-}
-
-
-/* Container cho ảnh ngẫu nhiên */
-#random-images-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  z-index: 2; /* Nằm trên pháo giấy (z-index: 1) nhưng dưới lớp chữ cuối (z-index: 3) */
-}
-
-/* Định dạng cho từng ảnh */
-.random-pic {
-  position: absolute;
-  max-width: 200px;
-  border-radius: 8px;
-  border: 4px solid white;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-
-  /* ================================================= */
-  /* SỬA LỖI: Luôn ẩn ảnh theo mặc định bằng CSS */
-  visibility: hidden;
-  opacity: 0;
-  scale: 0.3; /* Đồng bộ trạng thái ban đầu với animation */
-  /* ================================================= */
-}
-
-/* Đảm bảo lớp chữ cuối cùng luôn nằm trên cùng */
-.nine {
-  /* Kích thước và căn giữa */
-  max-width: 950px; /* Chiều rộng tối đa của card */
-  margin: 0 auto;   /* Tự động căn giữa theo chiều ngang */
-
-  /* Hiệu ứng thẻ (card) */
-  background-color: rgba(255, 255, 255, 0.25); /* Giảm độ đục, tăng độ trong suốt */
-  padding: 30px;      /* Tạo khoảng trống bên trong card */
-  border-radius: 15px; /* Bo tròn các góc */
-  box-shadow: 0 10px 30px rgba(89, 69, 69, 0.2); /* Đổ bóng nhẹ cho card */
-
-  -webkit-backdrop-filter: blur(2px); /* Giảm độ mờ xuống một nửa */
-  backdrop-filter: blur(2px);
-
-  /* Viền nhẹ để tăng hiệu ứng kính */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
-  /* Đảm bảo card luôn nằm trên cùng (quan trọng) */
-  position: relative;
-  z-index: 3;
-  visibility: hidden;
-  opacity: 0;
-
-}
-
-.nine p {
-  font-size: 1.8rem; /* Có thể điều chỉnh lại một chút cho vừa card */
-  font-weight: 500;
-  color: var(--text-color); /* Đảm bảo màu chữ rõ nét */
-  text-shadow: none; /* Bỏ đổ bóng của chữ vì card đã có nền riêng */
-}
-
-/* Chỉnh lại nút Replay cho đẹp hơn trong card */
-#replay {
-  cursor: pointer;
-  z-index: 3;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  color: var(--highlight-color); /* Đổi màu cho nổi bật */
-  transition: transform 0.2s ease;
-}
-
-#replay:hover {
-  transform: scale(1.05); /* Thêm hiệu ứng khi di chuột vào */
-}
-
-/* Reponsive cho thiết bị di động */
-@media screen and (max-width: 768px) {
-  .nine {
-    max-width: 90%; /* Chiếm 90% chiều rộng màn hình */
-    padding: 20px;
-  }
-
-  .nine p {
-    font-size: 1.5rem;
-  }
-}
-
-.star {
-  position: fixed; /* Luôn nằm trên màn hình */
-  background-color: white;
-  border-radius: 50%;
-  pointer-events: none; /* Không cản trở việc click/hover */
-  z-index: 998; /* Nằm trên nền nhưng dưới ảnh và các nội dung khác */
 }
